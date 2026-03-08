@@ -69,7 +69,7 @@ const ContactPopup = ({ isOpen, onClose }: ContactPopupProps) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[999] flex items-center justify-center px-4">
+    <div className="fixed inset-0 z-[999] flex items-center justify-center px-4 py-10 overflow-y-auto">
       <button
         type="button"
         aria-label="Popup schließen"
@@ -77,7 +77,7 @@ const ContactPopup = ({ isOpen, onClose }: ContactPopupProps) => {
         className="absolute inset-0 bg-black/70 backdrop-blur-sm"
       />
 
-      <div className="relative z-10 w-full max-w-2xl rounded-3xl border border-primary/15 bg-card/95 backdrop-blur-xl shadow-2xl">
+      <div className="relative z-10 w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl border border-primary/15 bg-card/95 backdrop-blur-xl shadow-2xl">
         <div className="flex items-center justify-between border-b border-white/10 px-6 py-5">
           <div>
             <p className="text-primary text-xs font-semibold uppercase tracking-[0.25em]">
