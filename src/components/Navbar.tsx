@@ -1,13 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const Navbar = () => {
+type NavbarProps = {
+  onOpenContact: () => void;
+};
+
+const Navbar = ({ onOpenContact }: NavbarProps) => {
   const [scrolled, setScrolled] = useState(false);
 
-  if (typeof window !== "undefined") {
-    window.addEventListener("scroll", () => {
-      setScrolled(window.scrollY > 20);
-    });
-  }
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <header
@@ -17,13 +21,10 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-6 lg:px-12">
         <div className="flex items-center justify-between h-20">
-
-          {/* Logo */}
           <div className="font-serif text-xl tracking-tight font-semibold">
             Gentlenance
           </div>
 
-          {/* Navigation */}
           <nav className="hidden md:flex items-center gap-10 text-sm text-muted-foreground">
             <a href="#services" className="hover:text-foreground transition-colors">
               Leistungen
@@ -46,14 +47,13 @@ const Navbar = () => {
             </a>
           </nav>
 
-          {/* CTA */}
-          <a
-            href="#cta"
+          <button
+            type="button"
+            onClick={onOpenContact}
             className="gradient-gold text-primary-foreground px-6 py-2.5 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity"
           >
             Erstgespräch buchen
-          </a>
-
+          </button>
         </div>
       </div>
     </header>

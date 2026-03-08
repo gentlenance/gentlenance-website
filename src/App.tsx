@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Navbar from "./components/Navbar";
 import HeroSection from "./components/HeroSection";
 import ProblemSection from "./components/ProblemSection";
@@ -10,15 +11,17 @@ import FaqSection from "./components/FaqSection";
 import CtaSection from "./components/CtaSection";
 import MobileStickyCta from "./components/MobileStickyCta";
 import Footer from "./components/Footer";
+import ContactPopup from "./components/ContactPopup";
 
 export default function App() {
+  const [isContactOpen, setIsContactOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-emerald-deep text-off-white">
-
-      <Navbar />
+      <Navbar onOpenContact={() => setIsContactOpen(true)} />
 
       <main>
-        <HeroSection />
+        <HeroSection onOpenContact={() => setIsContactOpen(true)} />
         <ProblemSection />
         <TargetSection />
         <WhySection />
@@ -26,11 +29,16 @@ export default function App() {
         <ServicesSection />
         <TestimonialsSection />
         <FaqSection />
-        <CtaSection />
+        <CtaSection onOpenContact={() => setIsContactOpen(true)} />
       </main>
 
       <Footer />
-      <MobileStickyCta />
+      <MobileStickyCta onOpenContact={() => setIsContactOpen(true)} />
+
+      <ContactPopup
+        isOpen={isContactOpen}
+        onClose={() => setIsContactOpen(false)}
+      />
     </div>
   );
 }

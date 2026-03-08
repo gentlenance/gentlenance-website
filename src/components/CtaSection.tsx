@@ -1,4 +1,8 @@
-const CtaSection = () => (
+type CtaSectionProps = {
+  onOpenContact: () => void;
+};
+
+const CtaSection = ({ onOpenContact }: CtaSectionProps) => (
   <section id="cta" className="py-32 lg:py-44 relative">
     <div className="section-divider absolute top-0 left-[10%] right-[10%]" />
 
@@ -18,12 +22,13 @@ const CtaSection = () => (
           dir helfen kann, deine Finanzen strategisch und elegant zu ordnen.
         </p>
 
-        <a
-          href="#cta"
+        <button
+          type="button"
+          onClick={onOpenContact}
           className="inline-block gradient-gold text-primary-foreground px-12 py-5 rounded-xl text-lg font-semibold hover:opacity-90 transition-all shadow-lg"
         >
           Erstgespräch buchen
-        </a>
+        </button>
       </div>
     </div>
   </section>

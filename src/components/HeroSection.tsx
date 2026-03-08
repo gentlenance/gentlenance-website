@@ -1,6 +1,10 @@
 import heroVisual from "@/assets/hero-visual.png";
 
-const HeroSection = () => (
+type HeroSectionProps = {
+  onOpenContact: () => void;
+};
+
+const HeroSection = ({ onOpenContact }: HeroSectionProps) => (
   <section className="relative min-h-[100vh] flex items-center overflow-hidden">
     <div className="absolute inset-0 gradient-hero" />
     <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-accent/10" />
@@ -41,15 +45,17 @@ const HeroSection = () => (
           </p>
 
           <div className="flex flex-col sm:flex-row gap-5 pt-2">
-            <a
-              href="#cta"
-              className="gradient-gold text-primary-foreground px-10 py-4.5 rounded-xl text-base font-semibold hover:opacity-90 transition-all text-center"
+            <button
+              type="button"
+              onClick={onOpenContact}
+              className="gradient-gold text-primary-foreground px-10 py-[18px] rounded-xl text-base font-semibold hover:opacity-90 transition-all text-center"
             >
               Erstgespräch buchen
-            </a>
+            </button>
+
             <a
               href="#services"
-              className="border border-primary/20 text-primary px-10 py-4.5 rounded-xl text-base font-medium hover:bg-primary/5 hover:border-primary/30 transition-all text-center"
+              className="border border-primary/20 text-primary px-10 py-[18px] rounded-xl text-base font-medium hover:bg-primary/5 hover:border-primary/30 transition-all text-center"
             >
               Mehr erfahren
             </a>
