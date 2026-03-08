@@ -13,7 +13,7 @@ const THEMEN = [
 ];
 
 const SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbxUx254Th0UaGHkCiE_VuddqSzalxHWfdgOt-D6MtGeEP1iY7XUKkwe3N2YbFcGEGnpPw/exec";
+  "https://script.google.com/macros/s/AKfycbzSa1PB-bVDEI4IoECGK7aIX610Jq7YZy_SGdM4eqTkG1Fkn_EbQAawxfX_jSUcF7kkZA/exec";
 
 const ContactPopup = ({ isOpen, onClose }: ContactPopupProps) => {
   const [formData, setFormData] = useState({
@@ -69,13 +69,20 @@ const ContactPopup = ({ isOpen, onClose }: ContactPopupProps) => {
     setLoading(true);
 
     try {
+      const body = new URLSearchParams();
+      body.append("name", formData.name);
+      body.append("email", formData.email);
+      body.append("phone", formData.phone);
+      body.append("topic", formData.topic);
+      body.append("message", formData.message);
+
       await fetch(SCRIPT_URL, {
         method: "POST",
         mode: "no-cors",
         headers: {
-          "Content-Type": "text/plain;charset=utf-8",
+          "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
         },
-        body: JSON.stringify(formData),
+        body: body.toString(),
       });
 
       setSubmitted(true);
