@@ -12,6 +12,9 @@ const THEMEN = [
   "Sonstiges",
 ];
 
+const SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbxUx254Th0UaGHkCiE_VuddqSzalxHWfdgOt-D6MtGeEP1iY7XUKkwe3N2YbFcGEGnpPw/exec";
+
 const ContactPopup = ({ isOpen, onClose }: ContactPopupProps) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -22,6 +25,8 @@ const ContactPopup = ({ isOpen, onClose }: ContactPopupProps) => {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (!isOpen) return;
@@ -48,24 +53,44 @@ const ContactPopup = ({ isOpen, onClose }: ContactPopupProps) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const resetForm = () => {
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+      topic: "",
+      message: "",
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
 
-    console.log("Gentlenance Lead:", formData);
-
-    setSubmitted(true);
-
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        topic: "",
-        message: "",
+    try {
+      await fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8",
+        },
+        body: JSON.stringify(formData),
       });
-      onClose();
-    }, 1800);
+
+      setSubmitted(true);
+      resetForm();
+
+      setTimeout(() => {
+        setSubmitted(false);
+        onClose();
+      }, 1800);
+    } catch (err) {
+      console.error("Fehler beim Senden:", err);
+      setError("Die Anfrage konnte gerade nicht gesendet werden. Bitte versuche es erneut.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -101,7 +126,7 @@ const ContactPopup = ({ isOpen, onClose }: ContactPopupProps) => {
           {submitted ? (
             <div className="rounded-2xl border border-primary/20 bg-primary/10 px-5 py-8 text-center">
               <h4 className="text-xl font-semibold text-foreground">
-                Anfrage erfolgreich erfasst
+                Anfrage erfolgreich gesendet
               </h4>
               <p className="mt-3 text-muted-foreground">
                 Danke. Wir melden uns schnellstmöglich bei dir.
@@ -190,6 +215,12 @@ const ContactPopup = ({ isOpen, onClose }: ContactPopupProps) => {
                 />
               </div>
 
+              {error && (
+                <div className="rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+                  {error}
+                </div>
+              )}
+
               <div className="flex flex-col gap-4 pt-2 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm text-muted-foreground">
                   Unverbindliche Anfrage. Wir melden uns persönlich bei dir.
@@ -197,9 +228,10 @@ const ContactPopup = ({ isOpen, onClose }: ContactPopupProps) => {
 
                 <button
                   type="submit"
-                  className="rounded-xl bg-primary px-7 py-3 font-semibold text-primary-foreground transition hover:opacity-90"
+                  disabled={loading}
+                  className="rounded-xl bg-primary px-7 py-3 font-semibold text-primary-foreground transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  Erstgespräch buchen
+                  {loading ? "Wird gesendet..." : "Erstgespräch buchen"}
                 </button>
               </div>
             </form>
